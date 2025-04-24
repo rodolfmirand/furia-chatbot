@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -9,6 +10,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true,
       entities: ['dist/**/*.model.js'],
     }),
+    ConfigModule.forRoot({
+      isGlobal: true
+    })
   ],
   controllers: [],
   providers: [],
