@@ -2,6 +2,9 @@ import { GenerativeModel, GoogleGenerativeAI } from '@google/generative-ai';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiResponseDTO } from 'src/models/responseDTO/api.response.dto';
+import { PromptFindAllService } from './prompt.findall.service';
+import { PromptModel } from 'src/models/prompt.model';
+import { PromptSaveService } from './prompt.save.service';
 
 @Injectable()
 export class GeminiService {
@@ -9,7 +12,7 @@ export class GeminiService {
     private genAI: GoogleGenerativeAI;
     private model: GenerativeModel
 
-    constructor(private configService: ConfigService) {
+    constructor(private configService: ConfigService, private promptSaveService: PromptSaveService, private promptFindAllService: PromptFindAllService) {
         const apiKey = this.configService.get('GEMINI_API_KEY');
 
         if (!apiKey) {
@@ -39,15 +42,25 @@ export class GeminiService {
 
             Evite fornecer qualquer tipo de informação fora desse escopo, como assuntos não relacionados ao CS:GO, outros times ou esportes, notícias não vinculadas ao time FURIA ou qualquer conversa geral. Mantenha o foco no universo do CS:GO e FURIA.
             Caso o usuário peça algo fora desse escopo, forneça uma resposta educada informando que você só pode fornecer informações relacionadas ao time FURIA de CS:GO.
-            
-            Os seguintes textos são o histórico da conversa com o usuário:` + userPrompt;
 
-        const response = (await this.model.generateContent(prompt)).response.text;
+            Histórico de conversa com usuário: `;
 
-        prompt += '\nPrompt do usuário: \n' + userPrompt + '\nResposta: \n' + response  ;
+        const promptHistory = await this.promptFindAllService.findAll();
+        
+        console.log(promptHistory)
 
-        console.log(prompt);
+        promptHistory.forEach((p) => {
+            prompt += p + `\n`;
+        });
 
-        return new ApiResponseDTO(prompt);
+        prompt += `Texto atula do usuário: ` + userPrompt;
+
+        const response = (await this.model.generateContent(prompt)).response.text();
+
+        const textToSave = `Texto do usuário: ` + userPrompt + `
+        Resposta:` + response;
+        await this.promptSaveService.save(textToSave);
+
+        return new ApiResponseDTO(response);
     }
 }
