@@ -8,4 +8,8 @@ export class PromptModel {
 
     @Column()
     text: string
+
+    constructor(prompt: string){
+        this.text = prompt
+    }
 }
