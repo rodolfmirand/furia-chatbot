@@ -32,35 +32,52 @@ export class GeminiService {
 
     async generateText(userPrompt: string) {
         let prompt =
-            `Você é um chatbot dedicado a fornecer informações sobre o time FURIA de CS:GO. Seu único foco deve ser o time de CS:GO FURIA e tudo relacionado a ele. 
+            `
+Você é um chatbot dedicado a fornecer informações sobre o time FURIA de CS:GO. Seu único foco deve ser o time de CS:GO FURIA e tudo relacionado a ele. 
 
-            Você deve responder somente a perguntas ou solicitações que envolvam:
-            - Informações sobre o time FURIA: Como histórico, conquistas, performance, jogadores e estrutura da equipe de CS:GO.
-            - Jogadores do time FURIA: Dados sobre os membros atuais, suas estatísticas, desempenho nas últimas partidas, e informações sobre transferências ou atualizações.
-            - Partidas e torneios: Resultados de jogos passados, próximos jogos, detalhes sobre competições e eventos em que a FURIA está participando.
-            - Notícias e atualizações do time: Informações novas relacionadas ao time, como anúncios ou mudanças no elenco, patrocínios, etc.
+Você deve responder somente a perguntas ou solicitações que envolvam:
+- Informações sobre o time FURIA: Como histórico, conquistas, performance, jogadores e estrutura da equipe de CS:GO.
+- Jogadores do time FURIA: Dados sobre os membros atuais, suas estatísticas, desempenho nas últimas partidas, e informações sobre transferências ou atualizações.
+- Partidas e torneios: Resultados de jogos passados, próximos jogos, detalhes sobre competições e eventos em que a FURIA está participando.
+- Notícias e atualizações do time: Informações novas relacionadas ao time, como anúncios ou mudanças no elenco, patrocínios, etc.
 
-            Evite fornecer qualquer tipo de informação fora desse escopo, como assuntos não relacionados ao CS:GO, outros times ou esportes, notícias não vinculadas ao time FURIA ou qualquer conversa geral. Mantenha o foco no universo do CS:GO e FURIA.
-            Caso o usuário peça algo fora desse escopo, forneça uma resposta educada informando que você só pode fornecer informações relacionadas ao time FURIA de CS:GO.
+❗Evite fornecer qualquer tipo de informação fora desse escopo, como: 
+- Assuntos não relacionados ao CS:GO
+- Outros times ou esportes (apenas se a pergunta envolver a Furia)
+- Notícias não vinculadas ao time FURIA ou qualquer conversa geral
+- Mantenha o foco no universo do CS:GO e FURIA
 
-            Histórico de conversa com usuário: `;
+🔒 Caso o usuário peça algo fora desse escopo, forneça uma resposta educada informando que você só pode fornecer informações relacionadas ao time FURIA de CS:GO.
+
+📌 Formato da resposta: envie a resposta formatada em HTML pronto para ser exibido em uma página. Use tags como <ul>, <li>, <strong>, <p>, etc. Não use tags como contrabarra(n) ou contrabarra(t)
+
+---
+            
+📜 Histórico de conversa com usuário:\n`;
 
         const promptHistory = await this.promptFindAllService.findAll();
-        
+
         console.log(promptHistory)
 
         promptHistory.forEach((p) => {
-            prompt += p + `\n`;
+            prompt += p.text + '\n';
         });
 
-        prompt += `Texto atula do usuário: ` + userPrompt;
+        prompt += '\n\n---\n\n'
+
+        prompt += `🗣️ Texto atual do usuário: ${userPrompt}`;
 
         const response = (await this.model.generateContent(prompt)).response.text();
 
-        const textToSave = `Texto do usuário: ` + userPrompt + `
-        Resposta:` + response;
+        const cleanHtml = response
+            .replace(/```html\n?/g, '')
+            .replace(/```/g, '')
+            .replace(/\n/g, '')
+            .trim();
+
+        const textToSave = `Texto do usuário: ${userPrompt}\nResposta: ${cleanHtml}`;
         await this.promptSaveService.save(textToSave);
 
-        return new ApiResponseDTO(response);
+        return new ApiResponseDTO(cleanHtml);
     }
 }
