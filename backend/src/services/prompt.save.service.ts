@@ -8,8 +8,8 @@ export class PromptSaveService {
 
     constructor(@InjectRepository(PromptModel) private repository: Repository<PromptModel>) { }
 
-    public async save(prompt: string): Promise<any> {
-        const promptToSave = new PromptModel(prompt)
+    public async save(userPrompt: string, apiResponse: string): Promise<any> {
+        const promptToSave = new PromptModel(userPrompt, apiResponse)
         return await this.repository.save(promptToSave)
     }
 }
