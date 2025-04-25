@@ -7,9 +7,13 @@ export class PromptModel {
     id: string
 
     @Column()
-    text: string
+    userPrompt: string;
 
-    constructor(prompt: string){
-        this.text = prompt
+    @Column()
+    apiResponse: string;
+
+    constructor(userPrompt: string, apiResponse: string){
+        this.userPrompt = userPrompt;
+        this.apiResponse = apiResponse;
     }
 }
