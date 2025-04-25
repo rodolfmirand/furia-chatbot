@@ -1,0 +1,23 @@
+.chatContainer {
+    background-color: rgb(20, 20, 20);
+    height: 100vh;
+
+    flex: 1;
+    padding-bottom: 60px;
+    overflow-y: auto;
+}
+
+.inputArea {
+    background-color: rgb(36, 36, 36);
+    position: fixed;
+    bottom: 100px;
+
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+}
