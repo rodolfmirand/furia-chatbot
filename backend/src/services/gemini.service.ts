@@ -57,10 +57,8 @@ Você deve responder somente a perguntas ou solicitações que envolvam:
 
         const promptHistory = await this.promptFindAllService.findAll();
 
-        console.log(promptHistory)
-
         promptHistory.forEach((p) => {
-            prompt += p.text + '\n';
+            prompt += `\n\nPergunta do usuário: ${p.userPrompt} \nResposta da API: ${p.apiResponse}`;
         });
 
         prompt += '\n\n---\n\n'
@@ -75,8 +73,7 @@ Você deve responder somente a perguntas ou solicitações que envolvam:
             .replace(/\n/g, '')
             .trim();
 
-        const textToSave = `Texto do usuário: ${userPrompt}\nResposta: ${cleanHtml}`;
-        await this.promptSaveService.save(textToSave);
+        await this.promptSaveService.save(userPrompt, cleanHtml);
 
         return new ApiResponseDTO(cleanHtml);
     }
