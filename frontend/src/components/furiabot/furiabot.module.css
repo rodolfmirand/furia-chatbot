@@ -1,0 +1,19 @@
+.messageContainer {
+    background-color: rgb(19, 19, 19);
+    width: 50vw;
+    border-radius: 5px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.furiaIcon {
+    width: 3vw;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.message {
+    padding: 20px;
+}
