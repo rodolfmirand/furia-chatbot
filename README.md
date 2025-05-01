@@ -1,4 +1,4 @@
-# Projeto Fullstack com NestJS e React
+# ChatBot Furia - Projeto FullStack NestJs e React
 
 Este projeto é composto por um backend desenvolvido com **NestJS** e um frontend desenvolvido com **React**. Ele utiliza **SQLite** como banco de dados e segue boas práticas de validação, tipagem e organização de código.
 
