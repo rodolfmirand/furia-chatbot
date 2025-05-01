@@ -1,11 +1,11 @@
 export const getChatResponse = async (question) => {
     try {
-        const response = await fetch('http://localhost:3000/chatbot-furia', {
+        const response = await fetch('http://localhost:8080/chatbot-furia', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ question })
+            body: JSON.stringify({ prompt: question })
         });
 
         const data = await response.json();
