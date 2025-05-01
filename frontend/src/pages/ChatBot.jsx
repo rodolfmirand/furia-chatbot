@@ -27,8 +27,6 @@ function ChatBot() {
         }
     }
 
-    const endRef = useRef(null);
-
     return (
         <div className={styles.chatContainer}>
             <div className={styles.messagesArea}>
@@ -42,6 +40,7 @@ function ChatBot() {
                     </div>
                 ))}
             </div>
+
             <div className={styles.inputArea}>
                 <Input question={input} onChange={(e) => setInput(e.target.value)} onSend={handleSend} />
             </div>
