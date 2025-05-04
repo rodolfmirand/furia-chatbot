@@ -1,6 +1,6 @@
 export const getChatResponse = async (question) => {
     try {
-        const response = await fetch('http://localhost:8080/chatbot-furia', {
+        const response = await fetch('https://furia-chatbot-jdph.onrender.com', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
